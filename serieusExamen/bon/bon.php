@@ -4,31 +4,7 @@ include_once '../connectionDatabase.php';
 include_once '../customer/functions.php';
 include_once '../reservation/functions.php';
 include_once 'functions.php';
-
-//if (isset($_GET['delete'])) {
-//    $id = $_GET['delete'];
-//
-//    $del = deleteReservation($pdo, $id);
-//    if (is_numeric($del)) {
-//        $success = "Reservering met succes verwijderd";
-//    } else {
-//        $error = "Daar ging iets fout, probeer het opnieuw: " . $id . "<br>";
-//    }
-//
-//}
-
-// klanten ophalen:
-$customerList = customerList($pdo);
-
-// reserveringen ophalen:
-$reservationList = reservationList($pdo);
-
-// menu items ophalen
-$menuitemsList = menuitemsList($pdo);
-//
-//
-//// orderlist ophalen:
- $orderList = orderList($pdo);
+$getItems = getItems($pdo);
 ?>
 
 
@@ -44,6 +20,13 @@ $menuitemsList = menuitemsList($pdo);
 <table class="table table-striped table-dark table-hover">
     <thead>
     <tr>
+        <?php
+        foreach ($getItems as $i){
+            ?>
+            <th>Tafel:<?= $i['tafel'] ?> </th>
+            <?php
+        }
+        ?>
         <th>Tafel</th>
         <th>Aantal</th>
         <th>Gerechten</th>
@@ -51,8 +34,7 @@ $menuitemsList = menuitemsList($pdo);
     </thead>
     <tbody>
     <?php
-    $items = getItems($pdo);
-    foreach ($items as $i) {
+    foreach ($getItems as $i) {
         ?>
         <tr>
             <td><?= $i['tafel'] ?></td>
@@ -69,3 +51,4 @@ $menuitemsList = menuitemsList($pdo);
         crossorigin="anonymous"></script>
 </body>
 </html>
+

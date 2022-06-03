@@ -144,9 +144,10 @@ $dranken = dranken($pdo)
 
                         <tr>
                             <td><?= $d['naam'] ?></td>
-                            <td><?= $d['code'] ?></td>
+                            <td><?= $n['code'] ?></td>
                             <td><?= $n['beschrijving'] ?></td>
-                            <td><a class="btn btn-danger" href="index.php?delete=<?= $n['id'] ?>">delete</a>
+                            <td><a class="btn btn-danger" href="index.php?delete=<?= $n['id'] ?>">delete</a> |
+                                <a class="btn btn-info" href="editDrinks.php?id=<?= $n['id'] ?>">edit</a></td>
 
 
                         <?php

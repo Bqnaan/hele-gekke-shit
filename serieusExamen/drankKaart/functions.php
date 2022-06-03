@@ -1,17 +1,4 @@
 <?php
-
-function drinkCategoryList($pdo)
-{
-    try {
-        $stmt = $pdo->prepare("SELECT * FROM `gerechtcategorien` WHERE (`gerechtcategorien`.`id` = 4)");
-        $stmt->execute();
-        $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        return $rows;
-    } catch (PDOException $e) {
-        return $e;
-    }
-}
-
 function drinkTypeList($pdo)
 {
     try {
@@ -30,6 +17,17 @@ function dranken($pdo)
     try {
         $stmt = $pdo->prepare("SELECT id, naam FROM gerechtsoorten where gerechtcategorie_id = 4");
         $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    } catch (PDOException $e) {
+        return $e;
+    }
+}
+
+function beschrijvingen($pdo, $id)
+{
+    try {
+        $stmt = $pdo->prepare("SELECT id, code, beschrijving FROM menuitems WHERE id = ?");
+        $stmt->execute([$id]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     } catch (PDOException $e) {
         return $e;
@@ -80,11 +78,12 @@ function deleteDrinkType($pdo, $id)
     }
 }
 
-function updateDrink($pdo, $id, $naam, $beschrijving)
+function updateDrink($pdo, $id, $naam, $code, $beschrijving)
 {
     try {
-        $stmt = $pdo->prepare("UPDATE Drink SET naam = ?, beschrijving ? WHERE id = ?");
-        $stmt->execute([$id, $naam, $beschrijving]);
+        $stmt = $pdo->prepare("UPDATE menuitems SET code = ?, beschrijving = ? WHERE id = ?");
+
+        $stmt->execute([$code, $beschrijving, $id]);
         return $id;
     } catch (PDOException $e) {
         return $e;

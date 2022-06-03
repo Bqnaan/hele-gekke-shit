@@ -1,29 +1,30 @@
 <?php
-//customer / edit.php
 
 include_once '../connectionDatabase.php';
 include_once 'functions.php';
 
 if ($_SERVER['REQUEST_METHOD'] === "POST") {
-// iemand heeft dit gepost!
+    // iemand heeft dit gepost!
 
-    if (isset($_POST['id']) && isset($_POST['naam']) && isset($_POST['beschrijving'])) {
-//alle velden bestaan en zijn ingevuld?
-//check of ze wel waarden hebben:
-        $id = $_POST['id'];
+    if (isset($_GET['id']) && isset($_POST['naam']) && isset($_POST['code']) && isset($_POST['beschrijving'])) {
+        //alle velden bestaan en zijn ingevuld?
+        //check of ze wel waarden hebben:
+        $id = $_GET['id'];
         $naam = $_POST['naam'];
+        $code = $_POST['code'];
         $beschrijving = $_POST['beschrijving'];
+//        $id = $_POST['id'];
 
-//check of ze leeg zijn
-        if (empty($naam) or empty($beschrijving)) {
-            echo "alle velden zijn wel verplicht jij hond<br>";
+        //check of ze leeg zijn
+        if (empty($naam) or empty($code) or empty($beschrijving)) {
+            $warning = "alle velden zijn wel verplicht<br>";
         } else {
-            $update = updateDrink($pdo, $id, $naam, $beschrijving);
-//                        echo $id;
-            if (is_numeric($update)) {
-                echo "Klant met succes aangepast! Klik <a href='index.php'>hier om terug te gaan naar het overzicht</a><br>";
+            $updateDrink = updateDrink($pdo, $id, $naam, $code, $beschrijving);
+                        echo $updateDrink;
+            if (is_numeric($updateDrink)) {
+                $success = "Drinken met succes toegevoegd!<br>";
             } else {
-                echo "Daar ging iets fout, probeer het opnieuw: " . $update . "<br>";
+                $error = "Daar ging iets fout, probeer het opnieuw: " . $id . "<br>";
             }
         }
     }
@@ -32,29 +33,40 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
 
 if (isset($_GET['id'])) {
     $id = $_GET['id'];
+    $dranken = dranken($pdo);
+    $beschrijvingen = beschrijvingen($pdo, $id);
 
-    $drinkTypeList = drinkTypeList($pdo);
-
-    $drinkCategoryList = drinkCategoryList($pdo);
-
-    $drinkName = drinkName($pdo, $cat);
-
-    $updateDrink = updateDrink($pdo, $id, $naam, $beschrijving);
 //    var_dump($c);
 }
+//$dranken = dranken($pdo);
 
 ?>
 
-<form method="post" action="edit.php?id=<?= $id ?>">
-    <select name="name">
+<form method="post" action="editDrinks.php?id=<?= $id ?>">
+    <select required class="uk-select" id="naam" name="naam">
+        <option disabled> Kies een dranksoort</option>
         <?php
-        foreach ($drinkCategoryList as $c) {
-
-            ?>
-            <option value="<?= $t['id'] ?>"><?= $t['naam'] ?></option>
-            <?php
+        foreach ($dranken as $d) {
+            echo '<option selected value="' . $d['id'] . '">' . $d['naam'] . '</option>';
         }
         ?>
-    </select><br>
+    </select> <br>
+    Code:
+    <?php
+    foreach ($beschrijvingen as $b) {
+        ?>
+        <input required type="text" id="code" maxlength="3" minlength="3" name="code" value="<?= $b['code']?>"><br>
+    <?php
+    }
+    ?>
+    Beschrijving:
+    <?php
+    foreach ($beschrijvingen as $b) {
+
+        ?>
+        <input required type="text" id="beschrijving" name="beschrijving" value="<?= $b['beschrijving']?>"><br>
+        <?php
+    }
+    ?>
     <input type="submit" value="Save">
 </form>
