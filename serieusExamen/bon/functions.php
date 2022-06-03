@@ -14,3 +14,16 @@ function getItems($pdo)
         }
     }
 }
+
+function getRekening($pdo)
+{
+    {
+        try {
+            $stmt = $pdo->prepare("SELECT  menuitems.beschrijving, bestellingen.aantal, menuitems.prijs FROM bestellingen INNER JOIN menuitems on bestellingen.menuitem_id = menuitems.id WHERE bestellingen.reservering_id = 8");
+            $stmt->execute([]);
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            return $e;
+        }
+    }
+}

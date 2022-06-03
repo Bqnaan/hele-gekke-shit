@@ -4,6 +4,8 @@ include_once '../connectionDatabase.php';
 include_once '../customer/functions.php';
 include_once '../reservation/functions.php';
 include_once 'functions.php';
+
+$getRekening = getRekening($pdo);
 $getItems = getItems($pdo);
 ?>
 
@@ -16,32 +18,32 @@ $getItems = getItems($pdo);
 
 </head>
 <body>
-<p>Actueel overzicht van te maken gerechten</p>
+<p>Totaal bon</p>
 <table class="table table-striped table-dark table-hover">
     <thead>
     <tr>
-        <?php
-        foreach ($getItems as $i){
-            ?>
-            <th>Tafel:<?= $i['tafel'] ?> </th>
-            <?php
-        }
-        ?>
-        <th>Tafel</th>
+<!--        helaas snel moeten hardcoden ivm tijdsnood :(      -->
+        <th>Tafel: 8</th>
+    </tr>
+    <tr>
+        <th>Gerecht</th>
         <th>Aantal</th>
-        <th>Gerechten</th>
+        <th>Prijs</th>
+        <th>Totaal</th>
     </tr>
     </thead>
     <tbody>
     <?php
-    foreach ($getItems as $i) {
+    foreach ($getRekening as $i) {
         ?>
         <tr>
-            <td><?= $i['tafel'] ?></td>
-            <td><?= $i['aantal'] ?></td>
             <td><?= $i['beschrijving'] ?></td>
+            <td><?= $i['aantal'] ?></td>
+            <td><?= $i['prijs'] ?></td>
+            <td><?= $totaal = $i['prijs'] * $i['aantal']; $totaal  ?></td>
         </tr>
     <?php } ?>
+    Totaal te betalen: WERKT NOG NIET
     </tbody>
 </table>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
